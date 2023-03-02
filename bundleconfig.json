@@ -1,0 +1,12 @@
+[
+  {
+    "outputFileName": "\\Mira\\wwwroot\\js\\scripts.js",
+    "inputFiles": [
+      "#\\Mira\\wwwroot\\js\\jquery.min.js",
+      "#\\Mira\\wwwroot\\js\\breakpoints.min.js",
+      "#\\Mira\\wwwroot\\js\\browser.min.js",
+      "#\\Mira\\wwwroot\\js\\main.js",
+      "#\\Mira\\wwwroot\\js\\util.js"
+    ]
+  }
+]

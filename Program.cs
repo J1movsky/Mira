@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.Identity.Client;
 using Mira.Domain;
 using Mira.Domain.Repositories.Abstract;
@@ -27,15 +28,25 @@ namespace Mira
 
             var builder = WebApplication.CreateBuilder(args);
 
+
+            // получаем строку подключения из файла конфигурации
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            // добавляем контекст ApplicationContext в качестве сервиса в приложение
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+
+
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-            // получаем строку подключения из файла конфигурации
-            string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 
-            // добавляем контекст ApplicationContext в качестве сервиса в приложение
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
+            // подключение конфигурацию из appseting.json
+            builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            ///
+            ///
+            ///  СДЕЛАТЬ ЗАВТРА !!!!!!!!!! ////
+            ///
+            ///
 
             //Настраиваем Identity систему
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(opts=>
@@ -62,12 +73,6 @@ namespace Mira
             });
 
 
-            // подключение конфигурацию из appseting.json
-            var config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json").Build();
-            var section = config.GetSection(nameof(Project));
-            var project = section.Get<Project>();
-
 
             // Подключаем нужный функционал приложения
             builder.Services.AddTransient<ITextFieldRepository, EFTextFieldRepository>();
@@ -76,6 +81,9 @@ namespace Mira
 
 
             var app = builder.Build();
+
+
+           
 
 
             app.UseHttpsRedirection();

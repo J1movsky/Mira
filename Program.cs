@@ -21,12 +21,15 @@ using Mira.Service;
 namespace Mira
 {
     public class Program
+
     {
+
         public static void Main(string[] args)
         {
-
+            
 
             var builder = WebApplication.CreateBuilder(args);
+
 
 
             // получаем строку подключения из файла конфигурации
@@ -41,10 +44,14 @@ namespace Mira
 
 
             // подключение конфигурацию из appseting.json
-            builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            //IConfigurationBuilder configurationBuilder = builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            var config = new Config();
+            builder.Configuration.GetSection(Config.Project).Bind(config);
             ///
-            ///
+            /// 
             ///  СДЕЛАТЬ ЗАВТРА !!!!!!!!!! ////
+            ///  
+            ///  СДЕЛАНО!!!!! 
             ///
             ///
 

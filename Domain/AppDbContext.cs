@@ -13,19 +13,18 @@ namespace Mira.Domain
 {
     public class AppDbContext : DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
+        {
+            Database.EnsureDeleted();
+            Database.EnsureCreated();
+        }
 
         public DbSet<TextField> TextFields { get; set; }
         public DbSet<ServiceItem> ServiceItems { get; set; }
 
        
 
-        public string connectionString;
-        public AppDbContext(string connectionString)
-        {
-            this.connectionString = connectionString;   // получаем извне строку подключения
-            Database.EnsureCreated();
-        }
+        
 
         protected override void OnModelCreating(ModelBuilder modelbuilder)
         {

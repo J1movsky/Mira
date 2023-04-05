@@ -30,8 +30,11 @@ namespace Mira
 
 
             // получаем строку подключения из файла конфигурации и  добавляем контекст ApplicationContext в качестве сервиса в приложение
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+            //builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+            builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
+            builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
 
 
             // Add services to the container.

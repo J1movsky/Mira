@@ -29,9 +29,8 @@ namespace Mira
             var builder = WebApplication.CreateBuilder(args);
 
 
-            // получаем строку подключения из файла конфигурации
+            // получаем строку подключения из файла конфигурации и  добавляем контекст ApplicationContext в качестве сервиса в приложение
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            // добавляем контекст ApplicationContext в качестве сервиса в приложение
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 
@@ -41,12 +40,10 @@ namespace Mira
 
 
             // подключение конфигурацию из appseting.json
-            builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            ///
-            ///
-            ///  СДЕЛАТЬ ЗАВТРА !!!!!!!!!! ////
-            ///
-            ///
+            //builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+            var config = new Config();
+            builder.Configuration.GetSection(Config.Project).Bind(config);
+
 
             //Настраиваем Identity систему
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(opts=>

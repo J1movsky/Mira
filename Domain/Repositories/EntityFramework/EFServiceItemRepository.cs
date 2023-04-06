@@ -38,7 +38,7 @@ namespace Mira.Domain.Repositories.EntityFramevork
 
         public void DeleteServiceItem(Guid id)
         {
-            context.ServiceItems.Remove(new ServiceItem { Id = id });
+            context.ServiceItems.Remove(new ServiceItem() { Id = id });
             context.SaveChanges() ;
         }
     }

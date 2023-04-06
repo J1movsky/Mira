@@ -29,23 +29,30 @@ namespace Mira
             var builder = WebApplication.CreateBuilder(args);
 
 
+            // подключение конфигурацию из appseting.json
+            var config = new Config();
+            builder.Configuration.GetSection(Config.Project).Bind(config);
+
+
+            // Подключаем нужный функционал приложения в качесте сервисов
+            builder.Services.AddTransient<ITextFieldRepository, EFTextFieldRepository>();
+            builder.Services.AddTransient<IServiceItemsRepository, EFServiceItemRepository>();
+            builder.Services.AddTransient<DataManager>();
+
             // получаем строку подключения из файла конфигурации и  добавляем контекст ApplicationContext в качестве сервиса в приложение
-            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            //builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
-            builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
             var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
+            
 
+
+            
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
 
 
-            // подключение конфигурацию из appseting.json
-            //builder.Configuration.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            var config = new Config();
-            builder.Configuration.GetSection(Config.Project).Bind(config);
+            
 
 
             //Настраиваем Identity систему
@@ -74,25 +81,17 @@ namespace Mira
 
 
 
-            // Подключаем нужный функционал приложения
-            builder.Services.AddTransient<ITextFieldRepository, EFTextFieldRepository>();
-            builder.Services.AddTransient<IServiceItemsRepository, EFServiceItemRepository>();
-            builder.Services.AddTransient<DataManager>();
-
 
             var app = builder.Build();
 
+            /// Порядок регистрации middleware очень важен
 
-           
-
-
-            app.UseHttpsRedirection();
 
             // Подключение статичных файлов (css,js и т.д.)
             app.UseStaticFiles();
 
 
-
+            app.UseHttpsRedirection();
             // подключаем систему машрутизации
             app.UseRouting();
 

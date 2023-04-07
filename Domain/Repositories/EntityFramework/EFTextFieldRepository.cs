@@ -43,7 +43,7 @@ namespace Mira.Domain.Repositories.EntityFramevork
 
         public void DeleteTextField(Guid id)
         {
-            context.TextFields.Remove(new TextField { Id = id });
+            context.TextFields.Remove(new TextField() { Id = id });
             context.SaveChanges();
         }
 

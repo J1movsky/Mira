@@ -1,15 +1,16 @@
 ﻿using Mira.Domain.Repositories.Abstract;
+
 namespace Mira.Domain
 {
     public class DataManager  //Обслуживающий класс, для репозитория AppDbContext
     {
-        public ITextFieldRepository TextField { get; set; }
-        public IServiceItemsRepository ServiceItemsRepository { get; set; }
+        public ITextFieldRepository TextFields { get; set; }
+        public IServiceItemsRepository ServiceItems { get; set; }
 
-        public DataManager(ITextFieldRepository textField, IServiceItemsRepository serviceItemsRepository)
+        public DataManager(ITextFieldRepository textFieldRepository, IServiceItemsRepository serviceItemsRepository)
         {
-            TextField = textField;
-            ServiceItemsRepository = serviceItemsRepository;
+            TextFields = textFieldRepository;
+            ServiceItems = serviceItemsRepository;
         }
 
 

@@ -6,7 +6,6 @@ namespace Mira.Domain.Entites
     public class ServiceItem : EntityBase // класс для услуг на сайте
     {
         [Required(ErrorMessage = "Заполните название услуги")]
-
         [Display(Name = "Название услуги")]
         public override string? Title { get; set; }
 

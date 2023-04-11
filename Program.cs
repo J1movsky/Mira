@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Data.SqlClient;
@@ -42,16 +43,26 @@ namespace Mira
             // получаем строку подключения из файла конфигурации и  добавляем контекст ApplicationContext в качестве сервиса в приложение
             var connection = builder.Configuration["ConnectionStrings:DefaultConnection"];
             builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connection));
-            
 
 
+
             
+            // Добавляем сервисы для контроллера и представления (MVC) 
+            builder.Services.AddControllersWithViews(x=>
+            {
+                x.Conventions.Add(new AdminAreaAuthorization("Admin", "AdminArea")); // для области адним (папки) передаем политику AdminArea, которая реализована ниже.
+            });
+            //Настраиваем политику авторизации для Admin area
+            builder.Services.AddAuthorization(x =>
+            {
+                x.AddPolicy("AdminArea", policy => { policy.RequireRole("admin"); }); // требуем от пользователя роль admin
+            });
+
+
+
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-
-
-
             
 
 
@@ -103,10 +114,11 @@ namespace Mira
 
 
             // Регистрация нужных маршрутов (ендпоинты)
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(name: "default", pattern: "{controller=Home}/{action=Index}/{id?}");
+            app.MapControllerRoute(name: "admin", pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
+                 
+                
             app.Run();
         }
     }
